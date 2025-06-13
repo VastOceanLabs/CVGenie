@@ -1,334 +1,168 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <!-- Essential Meta Tags -->
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
-  <!-- Primary SEO Meta Tags -->
-  <title>Free Resume Builder | Create Professional Resumes Online - No Credit Card Required</title>
-  <meta name="title" content="Free Resume Builder | Create Professional Resumes Online - No Credit Card Required" />
-  <meta name="description" content="Build professional resumes for free with our ATS-optimized templates. 100% free forever - no hidden fees, no credit card required. Instant PDF download. Trusted by 250,000+ job seekers worldwide." />
-  <meta name="keywords" content="free resume builder, resume maker, CV builder, ATS resume, professional resume templates, resume generator, online resume builder" />
-  <meta name="author" content="FreeResume Builder" />
-  <meta name="robots" content="index, follow" />
-  
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://freeresume-builder.pages.dev/" />
-  <meta property="og:title" content="Free Resume Builder | Create Professional Resumes Online" />
-  <meta property="og:description" content="Build professional resumes for free with ATS-optimized templates. No credit card required. Instant PDF download." />
-  <meta property="og:image" content="https://freeresume-builder.pages.dev/og-image.jpg" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
-  <meta property="og:site_name" content="FreeResume Builder" />
-  <meta property="og:locale" content="en_US" />
-  
-  <!-- Twitter -->
-  <meta property="twitter:card" content="summary_large_image" />
-  <meta property="twitter:url" content="https://freeresume-builder.pages.dev/" />
-  <meta property="twitter:title" content="Free Resume Builder | Create Professional Resumes Online" />
-  <meta property="twitter:description" content="Build professional resumes for free with ATS-optimized templates. No credit card required. Instant PDF download." />
-  <meta property="twitter:image" content="https://freeresume-builder.pages.dev/twitter-image.jpg" />
-  <meta name="twitter:creator" content="@FreeResume" />
-  
-  <!-- Theme and Icons -->
-  <meta name="theme-color" content="#2563eb" />
-  <meta name="msapplication-TileColor" content="#2563eb" />
-  
-  <!-- Canonical URL -->
-  <link rel="canonical" href="https://freeresume-builder.pages.dev/" />
-  
-  <!-- Favicon and Icons -->
-  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#2563eb" />
-  
-  <!-- PWA Manifest -->
-  <link rel="manifest" href="/manifest.json" />
-  
-  <!-- Preconnect to external domains for performance -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  
-  <!-- Font Loading with performance optimization -->
-  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
-  <noscript>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" />
-  </noscript>
-  
-  <!-- Critical CSS for above-the-fold content -->
-  <style>
-    /* Critical CSS for immediate rendering */
-    html, body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
-      font-size: 16px;
-      line-height: 1.6;
-      color: #111827;
-      background-color: #ffffff;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      scroll-behavior: smooth;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
-    #root {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-    
-    /* Loading spinner styles */
-    .loading-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      text-align: center;
-      padding: 2rem;
-    }
-    
-    .loading-spinner {
-      width: 50px;
-      height: 50px;
-      border: 4px solid rgba(255, 255, 255, 0.3);
-      border-radius: 50%;
-      border-top-color: #ffffff;
-      animation: spin 1s ease-in-out infinite;
-      margin-bottom: 1rem;
-    }
-    
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-    
-    .loading-text {
-      font-size: 1.125rem;
-      font-weight: 500;
-      margin-bottom: 0.5rem;
-    }
-    
-    .loading-subtext {
-      font-size: 0.875rem;
-      opacity: 0.8;
-    }
-    
-    /* Hide loading container when React loads */
-    .app-loaded .loading-container {
-      display: none;
-    }
-    
-    /* Error fallback styles */
-    .error-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      background-color: #f9fafb;
-      color: #374151;
-      text-align: center;
-      padding: 2rem;
-    }
-    
-    .error-icon {
-      font-size: 4rem;
-      margin-bottom: 1rem;
-      color: #ef4444;
-    }
-    
-    .error-title {
-      font-size: 1.5rem;
-      font-weight: 600;
-      margin-bottom: 0.5rem;
-      color: #111827;
-    }
-    
-    .error-message {
-      font-size: 1rem;
-      margin-bottom: 1.5rem;
-      color: #6b7280;
-    }
-    
-    .error-button {
-      background-color: #2563eb;
-      color: white;
-      border: none;
-      padding: 0.75rem 1.5rem;
-      border-radius: 0.5rem;
-      font-size: 1rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: background-color 0.2s;
-    }
-    
-    .error-button:hover {
-      background-color: #1d4ed8;
-    }
-    
-    /* Font loading optimization */
-    body:not(.fonts-loaded) {
-      opacity: 0.98; /* Subtle hint that fonts are loading */
-    }
-    
-    body.fonts-loaded {
-      opacity: 1;
-      transition: opacity 0.2s ease-in-out;
-    }
-  </style>
-  
-  <!-- Structured Data for SEO -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": "FreeResume Builder",
-    "description": "Free online resume builder with professional ATS-optimized templates",
-    "url": "https://freeresume-builder.pages.dev",
-    "applicationCategory": "BusinessApplication",
-    "operatingSystem": "Web Browser",
-    "browserRequirements": "Requires JavaScript. Works with Chrome, Firefox, Safari, Edge.",
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "USD",
-      "availability": "https://schema.org/InStock"
-    },
-    "creator": {
-      "@type": "Organization",
-      "name": "FreeResume",
-      "url": "https://freeresume-builder.pages.dev"
-    },
-    "featureList": [
-      "ATS-optimized resume templates",
-      "Professional resume builder",
-      "Free PDF download",
-      "No credit card required",
-      "Industry-specific templates",
-      "Real-time preview",
-      "Mobile-friendly interface"
-    ],
-    "screenshot": "https://freeresume-builder.pages.dev/app-screenshot.jpg",
-    "softwareVersion": "1.0.0",
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.8",
-      "ratingCount": "2547",
-      "bestRating": "5",
-      "worstRating": "1"
-    }
-  }
-  </script>
-  
-  <!-- FAQ Structured Data -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "Is FreeResume Builder really free?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Yes, FreeResume Builder is 100% free forever. You can create unlimited resumes, use all templates, and download PDFs without any cost or credit card required."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Are the resume templates ATS-friendly?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "All our resume templates are designed to be ATS (Applicant Tracking System) friendly with clean formatting, standard fonts, and proper section organization to ensure your resume passes through automated screening systems."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Can I download my resume as a PDF?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Yes, you can instantly download your completed resume as a high-quality PDF file, perfect for job applications and printing."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Do I need to create an account?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "No account creation required. You can start building your resume immediately and save your progress locally in your browser."
-        }
-      }
-    ]
-  }
-  </script>
-  
-  <!-- Font loading and basic performance -->
-  <script>
-    // Font loading optimization with timeout fallback
-    try {
-      if ('fonts' in document) {
-        document.fonts.ready.then(() => {
-          document.body.classList.add('fonts-loaded');
-        });
-        
-        // Fallback timeout in case fonts never load
-        setTimeout(() => {
-          if (!document.body.classList.contains('fonts-loaded')) {
-            document.body.classList.add('fonts-loaded');
-          }
-        }, 3000);
-      } else {
-        // Immediate fallback for browsers without font loading API
-        document.body.classList.add('fonts-loaded');
-      }
-    } catch (error) {
-      // Always show content if anything fails
-      document.body.classList.add('fonts-loaded');
-    }
-  </script>
-</head>
+    <!-- Primary Meta Tags -->
+    <title>Free Resume Builder | Create Professional Resumes Online - No Credit Card</title>
+    <meta name="title" content="Free Resume Builder | Create Professional Resumes Online - No Credit Card">
+    <meta name="description" content="Build professional resumes for free. ATS-optimized templates, no hidden fees, instant PDF download. Trusted by 100,000+ job seekers worldwide.">
+    <meta name="keywords" content="free resume builder, resume maker, CV builder, ATS resume, professional templates, job search">
+    <meta name="robots" content="index, follow">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="language" content="English">
+    <meta name="author" content="FreeResume Builder">
 
-<body>
-  <!-- Noscript fallback for users with JavaScript disabled -->
-  <noscript>
-    <div style="text-align: center; padding: 2rem; background-color: #fef3c7; color: #92400e; border: 1px solid #f59e0b; margin: 1rem;">
-      <h1>JavaScript Required</h1>
-      <p>This application requires JavaScript to function properly. Please enable JavaScript in your browser settings and reload the page.</p>
-      <p>For the best experience creating your professional resume, please use a modern browser with JavaScript enabled.</p>
-    </div>
-  </noscript>
-  
-  <!-- Main React App Container -->
-  <div id="root">
-    <!-- Loading state displayed while React app loads -->
-    <div class="loading-container">
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://freeresume-builder.pages.dev/">
+    <meta property="og:title" content="Free Resume Builder | Create Professional Resumes Online">
+    <meta property="og:description" content="Build professional resumes for free. ATS-optimized templates, no hidden fees, instant PDF download.">
+    <meta property="og:image" content="https://freeresume-builder.pages.dev/og-image.jpg">
+    <meta property="og:site_name" content="FreeResume Builder">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://freeresume-builder.pages.dev/">
+    <meta property="twitter:title" content="Free Resume Builder | Create Professional Resumes Online">
+    <meta property="twitter:description" content="Build professional resumes for free. ATS-optimized templates, no hidden fees, instant PDF download.">
+    <meta property="twitter:image" content="https://freeresume-builder.pages.dev/twitter-image.jpg">
+
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "FreeResume Builder",
+      "description": "Free online resume builder with professional templates",
+      "url": "https://freeresume-builder.pages.dev",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web Browser",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "author": {
+        "@type": "Organization",
+        "name": "FreeResume"
+      },
+      "featureList": [
+        "ATS-Optimized Templates",
+        "PDF Export",
+        "Multiple Template Designs",
+        "Real-time Preview",
+        "Mobile Responsive",
+        "No Registration Required"
+      ]
+    }
+    </script>
+
+    <!-- Performance Optimization -->
+    <link rel="dns-prefetch" href="//fonts.googleapis.com">
+    <link rel="dns-prefetch" href="//fonts.gstatic.com">
+    
+    <!-- Critical CSS for faster loading -->
+    <style>
+      /* Critical CSS for initial page load */
+      body {
+        margin: 0;
+        font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+        line-height: 1.5;
+        font-weight: 400;
+        color: #213547;
+        background-color: #ffffff;
+        font-synthesis: none;
+        text-rendering: optimizeLegibility;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        -webkit-text-size-adjust: 100%;
+      }
+
+      #root {
+        width: 100%;
+        min-height: 100vh;
+      }
+
+      /* Loading spinner */
+      .loading-spinner {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 40px;
+        height: 40px;
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #2563eb;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+        0% { transform: translate(-50%, -50%) rotate(0deg); }
+        100% { transform: translate(-50%, -50%) rotate(360deg); }
+      }
+
+      /* Hide loading spinner when app loads */
+      .app-loaded .loading-spinner {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root">
+      <!-- Loading spinner shown while React app loads -->
       <div class="loading-spinner"></div>
-      <div class="loading-text">Loading FreeResume Builder</div>
-      <div class="loading-subtext">Preparing your professional resume builder...</div>
     </div>
-  </div>
-  
-  <!-- Error Boundary Fallback (hidden by default, shown by React on error) -->
-  <div id="error-fallback" style="display: none;">
-    <div class="error-container">
-      <div class="error-icon">⚠️</div>
-      <h1 class="error-title">Something went wrong</h1>
-      <p class="error-message">We're having trouble loading the resume builder. Please try refreshing the page.</p>
-      <button class="error-button" onclick="window.location.reload()">
+
+    <!-- NoScript fallback -->
+    <noscript>
+      <div style="text-align: center; padding: 50px; font-family: Arial, sans-serif;">
+        <h1>JavaScript Required</h1>
+        <p>This application requires JavaScript to run. Please enable JavaScript in your browser settings.</p>
+        <p>FreeResume Builder is a modern web application that helps you create professional resumes for free.</p>
+      </div>
+    </noscript>
+
+    <!-- React App Entry Point -->
+    <script type="module" src="/src/main.tsx"></script>
+
+    <!-- Error Boundary Fallback (shown by React on error) -->
+    <div id="error-fallback" style="display: none; text-align: center; padding: 50px; font-family: Arial, sans-serif;">
+      <h1>Something went wrong</h1>
+      <p>We're sorry, but there was an error loading the resume builder.</p>
+      <button onclick="window.location.reload()" style="padding: 10px 20px; background: #2563eb; color: white; border: none; border-radius: 5px; cursor: pointer;">
         Reload Page
       </button>
     </div>
-  </div>
-  
-  <!-- Vite will inject the compiled script tag here during build -->
-  <!-- In development: points to /src/main.tsx -->
-  <!-- In production: points to /assets/index-[hash].js -->
-  <script type="module" src="/src/main.tsx"></script>
-</body>
+
+    <!-- Development helper -->
+    <script>
+      // Remove loading spinner when app starts
+      window.addEventListener('DOMContentLoaded', () => {
+        setTimeout(() => {
+          document.body.classList.add('app-loaded');
+        }, 100);
+      });
+
+      // Global error handler
+      window.addEventListener('error', (event) => {
+        console.error('Application error:', event.error);
+        // Could show error fallback UI here
+      });
+    </script>
+  </body>
 </html>
