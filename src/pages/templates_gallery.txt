@@ -1,0 +1,920 @@
+import React, { useState, useMemo } from 'react';
+import { Link } from 'react-router-dom';
+import { 
+  ArrowLeft, FileText, Search, Filter, Star, CheckCircle, 
+  Eye, Download, Zap, Shield, Users, Briefcase, 
+  GraduationCap, Palette, Crown, Target, Award
+} from 'lucide-react';
+
+// Template data with comprehensive information
+const templateData = [
+  {
+    id: 'ats-friendly',
+    name: 'ATS-Friendly',
+    category: 'Professional',
+    description: 'Ultra-clean design optimized for Applicant Tracking Systems',
+    longDescription: 'Perfect for corporate jobs and tech positions. This template uses simple formatting that ATS systems can easily parse, ensuring your resume gets through automated screening.',
+    atsScore: 99,
+    difficulty: 'Beginner',
+    estimatedTime: '5 mins',
+    features: ['ATS Optimized', 'Clean Layout', 'Standard Fonts', 'Simple Structure'],
+    bestFor: ['Corporate Jobs', 'Tech Positions', 'Government', 'Large Companies'],
+    industries: ['Technology', 'Finance', 'Healthcare', 'Government'],
+    isPremium: false,
+    isPopular: true,
+    rating: 4.9,
+    downloads: 15420,
+    colors: {
+      primary: '#1f2937',
+      secondary: '#374151',
+      accent: '#6b7280'
+    },
+    layout: 'single-column',
+    sections: ['Header', 'Summary', 'Experience', 'Education', 'Skills'],
+    preview: {
+      headerStyle: 'centered',
+      fontFamily: 'Arial',
+      accentColor: '#1f2937',
+      spacing: 'comfortable'
+    }
+  },
+  {
+    id: 'professional',
+    name: 'Professional',
+    category: 'Business',
+    description: 'Classic business template for traditional industries',
+    longDescription: 'A timeless design that works well across all industries. Features clean typography and professional formatting that hiring managers expect.',
+    atsScore: 95,
+    difficulty: 'Beginner',
+    estimatedTime: '6 mins',
+    features: ['Clean Design', 'Professional Layout', 'Easy to Read', 'Versatile'],
+    bestFor: ['Business Roles', 'Management', 'Consulting', 'Sales'],
+    industries: ['Business', 'Consulting', 'Sales', 'Management'],
+    isPremium: false,
+    isPopular: true,
+    rating: 4.8,
+    downloads: 12350,
+    colors: {
+      primary: '#2563eb',
+      secondary: '#1e40af',
+      accent: '#3b82f6'
+    },
+    layout: 'single-column',
+    sections: ['Header', 'Summary', 'Experience', 'Education', 'Skills', 'Certifications'],
+    preview: {
+      headerStyle: 'left-aligned',
+      fontFamily: 'Times New Roman',
+      accentColor: '#2563eb',
+      spacing: 'standard'
+    }
+  },
+  {
+    id: 'modern',
+    name: 'Modern',
+    category: 'Creative',
+    description: 'Contemporary design with subtle color accents',
+    longDescription: 'Stand out with this modern template featuring contemporary design elements and strategic use of color to highlight key information.',
+    atsScore: 88,
+    difficulty: 'Intermediate',
+    estimatedTime: '7 mins',
+    features: ['Modern Design', 'Color Accents', 'Visual Hierarchy', 'Stylish'],
+    bestFor: ['Creative Roles', 'Marketing', 'Startups', 'Tech Companies'],
+    industries: ['Marketing', 'Design', 'Startups', 'Technology'],
+    isPremium: false,
+    isPopular: false,
+    rating: 4.7,
+    downloads: 8930,
+    colors: {
+      primary: '#10b981',
+      secondary: '#059669',
+      accent: '#34d399'
+    },
+    layout: 'two-column',
+    sections: ['Header', 'Summary', 'Experience', 'Skills', 'Education', 'Projects'],
+    preview: {
+      headerStyle: 'modern',
+      fontFamily: 'Inter',
+      accentColor: '#10b981',
+      spacing: 'compact'
+    }
+  },
+  {
+    id: 'creative',
+    name: 'Creative',
+    category: 'Design',
+    description: 'Bold design perfect for creative professionals',
+    longDescription: 'Showcase your creativity with this eye-catching template. Features unique layout elements and design flourishes that help creative professionals stand out.',
+    atsScore: 75,
+    difficulty: 'Advanced',
+    estimatedTime: '10 mins',
+    features: ['Unique Layout', 'Creative Elements', 'Portfolio Focus', 'Eye-catching'],
+    bestFor: ['Designers', 'Artists', 'Creative Directors', 'Portfolio Showcase'],
+    industries: ['Design', 'Advertising', 'Media', 'Arts'],
+    isPremium: true,
+    isPopular: false,
+    rating: 4.6,
+    downloads: 5670,
+    colors: {
+      primary: '#8b5cf6',
+      secondary: '#7c3aed',
+      accent: '#a78bfa'
+    },
+    layout: 'creative',
+    sections: ['Header', 'Portfolio', 'Experience', 'Skills', 'Education', 'Awards'],
+    preview: {
+      headerStyle: 'creative',
+      fontFamily: 'Poppins',
+      accentColor: '#8b5cf6',
+      spacing: 'artistic'
+    }
+  },
+  {
+    id: 'minimal',
+    name: 'Minimal',
+    category: 'Simple',
+    description: 'Clean and simple for timeless appeal',
+    longDescription: 'Less is more with this minimal template. Perfect for professionals who want their experience to speak for itself without distracting design elements.',
+    atsScore: 92,
+    difficulty: 'Beginner',
+    estimatedTime: '5 mins',
+    features: ['Minimal Design', 'Clean Typography', 'Timeless', 'Distraction-free'],
+    bestFor: ['Any Industry', 'Executives', 'Academics', 'Traditional Roles'],
+    industries: ['Any', 'Academia', 'Law', 'Medicine'],
+    isPremium: false,
+    isPopular: false,
+    rating: 4.5,
+    downloads: 7890,
+    colors: {
+      primary: '#6b7280',
+      secondary: '#4b5563',
+      accent: '#9ca3af'
+    },
+    layout: 'minimal',
+    sections: ['Header', 'Summary', 'Experience', 'Education', 'Skills'],
+    preview: {
+      headerStyle: 'minimal',
+      fontFamily: 'Georgia',
+      accentColor: '#6b7280',
+      spacing: 'generous'
+    }
+  },
+  {
+    id: 'executive',
+    name: 'Executive',
+    category: 'Leadership',
+    description: 'Premium template for senior-level positions',
+    longDescription: 'Designed for C-level executives and senior management. Features sophisticated layout with emphasis on leadership experience and strategic achievements.',
+    atsScore: 94,
+    difficulty: 'Intermediate',
+    estimatedTime: '8 mins',
+    features: ['Executive Focus', 'Leadership Emphasis', 'Premium Feel', 'Achievement-focused'],
+    bestFor: ['C-Level', 'VPs', 'Directors', 'Senior Management'],
+    industries: ['Executive', 'Finance', 'Consulting', 'Corporate'],
+    isPremium: true,
+    isPopular: true,
+    rating: 4.9,
+    downloads: 4320,
+    colors: {
+      primary: '#1e40af',
+      secondary: '#1e3a8a',
+      accent: '#3b82f6'
+    },
+    layout: 'executive',
+    sections: ['Header', 'Executive Summary', 'Leadership Experience', 'Board Positions', 'Education', 'Awards'],
+    preview: {
+      headerStyle: 'executive',
+      fontFamily: 'Times New Roman',
+      accentColor: '#1e40af',
+      spacing: 'executive'
+    }
+  },
+  {
+    id: 'tech',
+    name: 'Tech Professional',
+    category: 'Technology',
+    description: 'Specialized template for software engineers and developers',
+    longDescription: 'Built specifically for tech professionals. Includes sections for technical skills, projects, and GitHub links. Optimized for tech company ATS systems.',
+    atsScore: 93,
+    difficulty: 'Intermediate',
+    estimatedTime: '9 mins',
+    features: ['Tech-focused', 'Project Showcase', 'Skills Matrix', 'GitHub Integration'],
+    bestFor: ['Software Engineers', 'Developers', 'Data Scientists', 'DevOps'],
+    industries: ['Technology', 'Software', 'Startups', 'Tech Companies'],
+    isPremium: false,
+    isPopular: true,
+    rating: 4.8,
+    downloads: 11200,
+    colors: {
+      primary: '#059669',
+      secondary: '#047857',
+      accent: '#10b981'
+    },
+    layout: 'tech',
+    sections: ['Header', 'Summary', 'Technical Skills', 'Experience', 'Projects', 'Education'],
+    preview: {
+      headerStyle: 'tech',
+      fontFamily: 'Fira Code',
+      accentColor: '#059669',
+      spacing: 'code-friendly'
+    }
+  },
+  {
+    id: 'healthcare',
+    name: 'Healthcare',
+    category: 'Medical',
+    description: 'Professional template for healthcare workers',
+    longDescription: 'Designed for healthcare professionals with emphasis on certifications, clinical experience, and patient care. Includes specialized sections for medical roles.',
+    atsScore: 96,
+    difficulty: 'Intermediate',
+    estimatedTime: '7 mins',
+    features: ['Healthcare Focus', 'Certification Emphasis', 'Clinical Experience', 'Patient Care'],
+    bestFor: ['Nurses', 'Doctors', 'Healthcare Workers', 'Medical Staff'],
+    industries: ['Healthcare', 'Medical', 'Nursing', 'Clinical'],
+    isPremium: false,
+    isPopular: false,
+    rating: 4.7,
+    downloads: 6540,
+    colors: {
+      primary: '#dc2626',
+      secondary: '#b91c1c',
+      accent: '#ef4444'
+    },
+    layout: 'healthcare',
+    sections: ['Header', 'Summary', 'Clinical Experience', 'Certifications', 'Education', 'Skills'],
+    preview: {
+      headerStyle: 'medical',
+      fontFamily: 'Arial',
+      accentColor: '#dc2626',
+      spacing: 'clinical'
+    }
+  }
+];
+
+// Category definitions
+const categories = [
+  { id: 'all', name: 'All Templates', icon: FileText },
+  { id: 'Professional', name: 'Professional', icon: Briefcase },
+  { id: 'Creative', name: 'Creative', icon: Palette },
+  { id: 'Technology', name: 'Technology', icon: Zap },
+  { id: 'Leadership', name: 'Leadership', icon: Crown },
+  { id: 'Medical', name: 'Healthcare', icon: Shield }
+];
+
+// Filter options
+const filterOptions = {
+  difficulty: ['Beginner', 'Intermediate', 'Advanced'],
+  atsScore: ['90+', '80-89', '70-79'],
+  layout: ['single-column', 'two-column', 'creative', 'minimal']
+};
+
+// Template interface
+interface Template {
+  id: string;
+  name: string;
+  category: string;
+  description: string;
+  longDescription: string;
+  atsScore: number;
+  difficulty: string;
+  estimatedTime: string;
+  features: string[];
+  bestFor: string[];
+  industries: string[];
+  isPremium: boolean;
+  isPopular: boolean;
+  rating: number;
+  downloads: number;
+  colors: {
+    primary: string;
+    secondary: string;
+    accent: string;
+  };
+  layout: string;
+  sections: string[];
+  preview: {
+    headerStyle: string;
+    fontFamily: string;
+    accentColor: string;
+    spacing: string;
+  };
+}
+
+interface Filters {
+  difficulty: string[];
+  atsScore: string[];
+  layout: string[];
+  showOnlyFree: boolean;
+}
+
+export default function TemplatesGallery() {
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [showFilters, setShowFilters] = useState(false);
+  const [filters, setFilters] = useState<Filters>({
+    difficulty: [],
+    atsScore: [],
+    layout: [],
+    showOnlyFree: false
+  });
+  const [sortBy, setSortBy] = useState('popular'); // popular, rating, downloads, name
+  const [previewTemplate, setPreviewTemplate] = useState<Template | null>(null);
+
+  // Filter and search templates
+  const filteredTemplates = useMemo(() => {
+    let filtered = templateData;
+
+    // Category filter
+    if (selectedCategory !== 'all') {
+      filtered = filtered.filter(template => template.category === selectedCategory);
+    }
+
+    // Search filter
+    if (searchTerm) {
+      filtered = filtered.filter(template =>
+        template.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        template.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        template.industries.some(industry => 
+          industry.toLowerCase().includes(searchTerm.toLowerCase())
+        )
+      );
+    }
+
+    // Advanced filters
+    if (filters.difficulty.length > 0) {
+      filtered = filtered.filter(template => filters.difficulty.includes(template.difficulty));
+    }
+
+    if (filters.atsScore.length > 0) {
+      filtered = filtered.filter(template => {
+        return filters.atsScore.some(range => {
+          if (range === '90+') return template.atsScore >= 90;
+          if (range === '80-89') return template.atsScore >= 80 && template.atsScore < 90;
+          if (range === '70-79') return template.atsScore >= 70 && template.atsScore < 80;
+          return false;
+        });
+      });
+    }
+
+    if (filters.layout.length > 0) {
+      filtered = filtered.filter(template => filters.layout.includes(template.layout));
+    }
+
+    if (filters.showOnlyFree) {
+      filtered = filtered.filter(template => !template.isPremium);
+    }
+
+    // Sort templates
+    filtered.sort((a, b) => {
+      switch (sortBy) {
+        case 'rating':
+          return b.rating - a.rating;
+        case 'downloads':
+          return b.downloads - a.downloads;
+        case 'name':
+          return a.name.localeCompare(b.name);
+        case 'popular':
+        default:
+          if (a.isPopular && !b.isPopular) return -1;
+          if (!a.isPopular && b.isPopular) return 1;
+          return b.downloads - a.downloads;
+      }
+    });
+
+    return filtered;
+  }, [selectedCategory, searchTerm, filters, sortBy]);
+
+  // Template preview component
+  const TemplatePreview: React.FC<{ template: Template }> = ({ template }) => (
+    <div className="bg-white p-4 rounded-lg border-2" style={{ borderColor: template.colors.primary + '20' }}>
+      <div className="aspect-[8.5/11] bg-gray-50 rounded-lg mb-4 p-4 overflow-hidden">
+        {/* Simulated Resume Preview */}
+        <div className="space-y-3 text-xs">
+          {/* Header */}
+          <div className={`text-center ${template.preview.headerStyle === 'left-aligned' ? 'text-left' : ''}`}>
+            <div className="font-bold text-lg" style={{ color: template.colors.primary }}>
+              John Smith
+            </div>
+            <div className="text-gray-600">Software Engineer</div>
+            <div className="text-gray-500 text-xs">john@email.com • (555) 123-4567</div>
+          </div>
+          
+          {/* Summary */}
+          <div>
+            <div className="font-semibold border-b" style={{ borderColor: template.colors.primary, color: template.colors.primary }}>
+              PROFESSIONAL SUMMARY
+            </div>
+            <div className="text-gray-600 text-xs mt-1">
+              Experienced professional with strong background in...
+            </div>
+          </div>
+          
+          {/* Experience */}
+          <div>
+            <div className="font-semibold border-b" style={{ borderColor: template.colors.primary, color: template.colors.primary }}>
+              EXPERIENCE
+            </div>
+            <div className="mt-1">
+              <div className="font-medium text-xs">Senior Developer</div>
+              <div className="text-gray-500 text-xs">Tech Company • 2020-Present</div>
+              <div className="text-gray-600 text-xs">• Led development of key features</div>
+            </div>
+          </div>
+          
+          {/* Skills */}
+          <div>
+            <div className="font-semibold border-b" style={{ borderColor: template.colors.primary, color: template.colors.primary }}>
+              SKILLS
+            </div>
+            <div className="flex flex-wrap gap-1 mt-1">
+              {['JavaScript', 'React', 'Node.js'].map(skill => (
+                <span key={skill} className="px-2 py-1 text-xs rounded" style={{ backgroundColor: template.colors.primary + '20', color: template.colors.primary }}>
+                  {skill}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  const handleFilterChange = (filterType: keyof Filters, value: string, checked: boolean) => {
+    setFilters(prev => {
+      if (filterType === 'showOnlyFree') {
+        return { ...prev, showOnlyFree: checked };
+      }
+      
+      const currentFilters = prev[filterType] as string[];
+      if (checked) {
+        return { ...prev, [filterType]: [...currentFilters, value] };
+      } else {
+        return { ...prev, [filterType]: currentFilters.filter(f => f !== value) };
+      }
+    });
+  };
+
+  const clearAllFilters = () => {
+    setSearchTerm('');
+    setFilters({ difficulty: [], atsScore: [], layout: [], showOnlyFree: false });
+    setSelectedCategory('all');
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <header className="bg-white border-b border-gray-200 sticky top-0 z-40">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between py-4">
+            <div className="flex items-center space-x-4">
+              <Link to="/" className="flex items-center space-x-2 text-gray-600 hover:text-gray-900">
+                <ArrowLeft className="w-4 h-4" />
+                <span>Back to Home</span>
+              </Link>
+              <div className="flex items-center space-x-3">
+                <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                  <FileText className="w-5 h-5 text-white" />
+                </div>
+                <h1 className="text-xl font-bold text-gray-900">Resume Templates</h1>
+              </div>
+            </div>
+            
+            <div className="flex items-center space-x-4">
+              <span className="text-sm text-gray-600">
+                {filteredTemplates.length} template{filteredTemplates.length !== 1 ? 's' : ''}
+              </span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Hero Section */}
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+            Professional Resume Templates
+          </h1>
+          <p className="text-lg text-gray-600 max-w-3xl mx-auto mb-8">
+            Choose from our collection of professionally designed, ATS-optimized resume templates. 
+            All templates are completely free and ready to customize.
+          </p>
+          
+          {/* Stats */}
+          <div className="flex items-center justify-center space-x-8 text-sm text-gray-600 mb-8">
+            <div className="flex items-center space-x-1">
+              <Users className="w-4 h-4" />
+              <span>50,000+ downloads</span>
+            </div>
+            <div className="flex items-center space-x-1">
+              <Star className="w-4 h-4 text-yellow-500" />
+              <span>4.8 average rating</span>
+            </div>
+            <div className="flex items-center space-x-1">
+              <Shield className="w-4 h-4 text-green-500" />
+              <span>ATS optimized</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Search and Filters */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+          <div className="flex flex-col lg:flex-row gap-4">
+            {/* Search Bar */}
+            <div className="flex-1">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                <input
+                  type="text"
+                  placeholder="Search templates, industries, or keywords..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                />
+              </div>
+            </div>
+            
+            {/* Sort and Filter Controls */}
+            <div className="flex items-center space-x-4">
+              {/* Sort Dropdown */}
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              >
+                <option value="popular">Most Popular</option>
+                <option value="rating">Highest Rated</option>
+                <option value="downloads">Most Downloaded</option>
+                <option value="name">Name (A-Z)</option>
+              </select>
+              
+              {/* Filter Toggle */}
+              <button
+                onClick={() => setShowFilters(!showFilters)}
+                className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors ${
+                  showFilters ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                <Filter className="w-4 h-4" />
+                <span>Filters</span>
+              </button>
+            </div>
+          </div>
+          
+          {/* Advanced Filters */}
+          {showFilters && (
+            <div className="mt-6 pt-6 border-t border-gray-200">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                {/* Difficulty Filter */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Difficulty</label>
+                  <div className="space-y-2">
+                    {filterOptions.difficulty.map(option => (
+                      <label key={option} className="flex items-center">
+                        <input
+                          type="checkbox"
+                          checked={filters.difficulty.includes(option)}
+                          onChange={(e) => handleFilterChange('difficulty', option, e.target.checked)}
+                          className="mr-2 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                        />
+                        <span className="text-sm text-gray-700">{option}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+                
+                {/* ATS Score Filter */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">ATS Score</label>
+                  <div className="space-y-2">
+                    {filterOptions.atsScore.map(option => (
+                      <label key={option} className="flex items-center">
+                        <input
+                          type="checkbox"
+                          checked={filters.atsScore.includes(option)}
+                          onChange={(e) => handleFilterChange('atsScore', option, e.target.checked)}
+                          className="mr-2 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                        />
+                        <span className="text-sm text-gray-700">{option}%</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+                
+                {/* Layout Filter */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Layout</label>
+                  <div className="space-y-2">
+                    {filterOptions.layout.map(option => (
+                      <label key={option} className="flex items-center">
+                        <input
+                          type="checkbox"
+                          checked={filters.layout.includes(option)}
+                          onChange={(e) => handleFilterChange('layout', option, e.target.checked)}
+                          className="mr-2 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                        />
+                        <span className="text-sm text-gray-700 capitalize">{option.replace('-', ' ')}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+                
+                {/* Free Templates Only */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Pricing</label>
+                  <label className="flex items-center">
+                    <input
+                      type="checkbox"
+                      checked={filters.showOnlyFree}
+                      onChange={(e) => handleFilterChange('showOnlyFree', '', e.target.checked)}
+                      className="mr-2 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                    />
+                    <span className="text-sm text-gray-700">Free templates only</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Category Tabs */}
+        <div className="flex overflow-x-auto space-x-2 mb-8 pb-2">
+          {categories.map(category => {
+            const IconComponent = category.icon;
+            return (
+              <button
+                key={category.id}
+                onClick={() => setSelectedCategory(category.id)}
+                className={`flex items-center space-x-2 px-4 py-2 rounded-lg whitespace-nowrap transition-colors ${
+                  selectedCategory === category.id
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
+                }`}
+              >
+                <IconComponent className="w-4 h-4" />
+                <span>{category.name}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Templates Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {filteredTemplates.map(template => (
+            <div key={template.id} className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+              {/* Template Preview */}
+              <div className="relative">
+                <TemplatePreview template={template} />
+                
+                {/* Badges */}
+                <div className="absolute top-3 left-3 flex flex-col space-y-1">
+                  {template.isPopular && (
+                    <span className="bg-orange-500 text-white text-xs px-2 py-1 rounded-full font-medium flex items-center">
+                      <Star className="w-3 h-3 mr-1" />
+                      Popular
+                    </span>
+                  )}
+                  {template.isPremium && (
+                    <span className="bg-purple-500 text-white text-xs px-2 py-1 rounded-full font-medium flex items-center">
+                      <Crown className="w-3 h-3 mr-1" />
+                      Premium
+                    </span>
+                  )}
+                </div>
+                
+                {/* ATS Score */}
+                <div className="absolute top-3 right-3">
+                  <div className={`px-2 py-1 rounded-full text-xs font-medium ${
+                    template.atsScore >= 90 ? 'bg-green-500 text-white' :
+                    template.atsScore >= 80 ? 'bg-yellow-500 text-white' :
+                    'bg-red-500 text-white'
+                  }`}>
+                    ATS {template.atsScore}%
+                  </div>
+                </div>
+                
+                {/* Preview Button */}
+                <div className="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-20 transition-all duration-200 flex items-center justify-center opacity-0 hover:opacity-100">
+                  <button
+                    onClick={() => setPreviewTemplate(template)}
+                    className="bg-white text-gray-900 px-4 py-2 rounded-lg font-medium flex items-center space-x-2 hover:bg-gray-100 transition-colors"
+                  >
+                    <Eye className="w-4 h-4" />
+                    <span>Preview</span>
+                  </button>
+                </div>
+              </div>
+              
+              {/* Template Info */}
+              <div className="p-4">
+                <div className="flex items-start justify-between mb-2">
+                  <h3 className="font-semibold text-gray-900">{template.name}</h3>
+                  <div className="flex items-center text-yellow-500">
+                    <Star className="w-4 h-4 fill-current" />
+                    <span className="text-sm text-gray-600 ml-1">{template.rating}</span>
+                  </div>
+                </div>
+                
+                <p className="text-sm text-gray-600 mb-3">{template.description}</p>
+                
+                {/* Template Stats */}
+                <div className="flex items-center justify-between text-xs text-gray-500 mb-3">
+                  <span>{template.difficulty}</span>
+                  <span>{template.estimatedTime}</span>
+                  <span>{template.downloads.toLocaleString()} downloads</span>
+                </div>
+                
+                {/* Features */}
+                <div className="flex flex-wrap gap-1 mb-4">
+                  {template.features.slice(0, 2).map(feature => (
+                    <span key={feature} className="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded">
+                      {feature}
+                    </span>
+                  ))}
+                  {template.features.length > 2 && (
+                    <span className="text-xs text-gray-500">+{template.features.length - 2} more</span>
+                  )}
+                </div>
+                
+                {/* Best For */}
+                <div className="mb-4">
+                  <p className="text-xs font-medium text-gray-700 mb-1">Best for:</p>
+                  <p className="text-xs text-gray-600">{template.bestFor.slice(0, 2).join(', ')}</p>
+                </div>
+                
+                {/* Action Buttons */}
+                <div className="flex space-x-2">
+                  <Link 
+                    to={`/builder?template=${template.id}`}
+                    className="flex-1 bg-blue-600 text-white text-center py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors font-medium text-sm"
+                  >
+                    Use Template
+                  </Link>
+                  <button
+                    onClick={() => setPreviewTemplate(template)}
+                    className="bg-gray-100 text-gray-700 py-2 px-3 rounded-lg hover:bg-gray-200 transition-colors"
+                  >
+                    <Eye className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+        
+        {/* Empty State */}
+        {filteredTemplates.length === 0 && (
+          <div className="text-center py-12">
+            <FileText className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-gray-900 mb-2">No templates found</h3>
+            <p className="text-gray-600 mb-4">
+              Try adjusting your search criteria or filters to find the perfect template.
+            </p>
+            <button
+              onClick={clearAllFilters}
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              Clear Filters
+            </button>
+          </div>
+        )}
+
+        {/* CTA Section */}
+        <div className="mt-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg p-8 text-center text-white">
+          <h2 className="text-2xl font-bold mb-4">Can't Find the Perfect Template?</h2>
+          <p className="text-blue-100 mb-6 max-w-2xl mx-auto">
+            Start with any template and customize it to match your style. All templates are fully editable 
+            and you can change colors, fonts, and layouts to make it uniquely yours.
+          </p>
+          <Link to="/builder" className="inline-flex items-center px-6 py-3 bg-white text-blue-600 font-semibold rounded-lg hover:bg-gray-50 transition-colors">
+            <Zap className="w-5 h-5 mr-2" />
+            Start Building Now
+          </Link>
+        </div>
+      </div>
+
+      {/* Template Preview Modal */}
+      {previewTemplate && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-lg max-w-6xl w-full max-h-[90vh] overflow-hidden">
+            <div className="flex">
+              {/* Preview Panel */}
+              <div className="flex-1 p-6 bg-gray-50">
+                <div className="bg-white rounded-lg shadow-lg p-8 max-h-[80vh] overflow-y-auto">
+                  <TemplatePreview template={previewTemplate} />
+                </div>
+              </div>
+              
+              {/* Details Panel */}
+              <div className="w-96 p-6 border-l border-gray-200 max-h-[90vh] overflow-y-auto">
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-xl font-bold text-gray-900">{previewTemplate.name}</h2>
+                  <button
+                    onClick={() => setPreviewTemplate(null)}
+                    className="text-gray-400 hover:text-gray-600"
+                  >
+                    ✕
+                  </button>
+                </div>
+                
+                {/* Template Info */}
+                <div className="space-y-4">
+                  <div>
+                    <div className="flex items-center space-x-2 mb-2">
+                      <Target className="w-4 h-4 text-green-500" />
+                      <span className="font-medium text-green-700">
+                        ATS Score: {previewTemplate.atsScore}%
+                      </span>
+                    </div>
+                    <div className="flex items-center space-x-4 text-sm text-gray-600">
+                      <span>⏱️ {previewTemplate.estimatedTime}</span>
+                      <span>📊 {previewTemplate.difficulty}</span>
+                      <span>⭐ {previewTemplate.rating}</span>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <h3 className="font-medium text-gray-900 mb-2">Description</h3>
+                    <p className="text-gray-600 text-sm">{previewTemplate.longDescription}</p>
+                  </div>
+                  
+                  <div>
+                    <h3 className="font-medium text-gray-900 mb-2">Key Features</h3>
+                    <ul className="space-y-1">
+                      {previewTemplate.features.map(feature => (
+                        <li key={feature} className="flex items-center text-sm text-gray-600">
+                          <CheckCircle className="w-3 h-3 text-green-500 mr-2" />
+                          {feature}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  
+                  <div>
+                    <h3 className="font-medium text-gray-900 mb-2">Perfect For</h3>
+                    <div className="flex flex-wrap gap-1">
+                      {previewTemplate.bestFor.map(role => (
+                        <span key={role} className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">
+                          {role}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <h3 className="font-medium text-gray-900 mb-2">Industries</h3>
+                    <div className="flex flex-wrap gap-1">
+                      {previewTemplate.industries.map(industry => (
+                        <span key={industry} className="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded">
+                          {industry}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <h3 className="font-medium text-gray-900 mb-2">Template Details</h3>
+                    <div className="text-sm text-gray-600 space-y-1">
+                      <div>Layout: <span className="capitalize">{previewTemplate.layout.replace('-', ' ')}</span></div>
+                      <div>Sections: {previewTemplate.sections.length}</div>
+                      <div>Downloads: {previewTemplate.downloads.toLocaleString()}</div>
+                    </div>
+                  </div>
+                  
+                  {/* Action Buttons */}
+                  <div className="space-y-3 pt-4">
+                    <Link
+                      to={`/builder?template=${previewTemplate.id}`}
+                      className="w-full bg-blue-600 text-white text-center py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center justify-center space-x-2"
+                      onClick={() => setPreviewTemplate(null)}
+                    >
+                      <FileText className="w-4 h-4" />
+                      <span>Use This Template</span>
+                    </Link>
+                    
+                    <button
+                      onClick={() => setPreviewTemplate(null)}
+                      className="w-full bg-gray-100 text-gray-700 text-center py-3 px-4 rounded-lg hover:bg-gray-200 transition-colors font-medium"
+                    >
+                      Close Preview
+                    </button>
+                  </div>
+                  
+                  {previewTemplate.isPremium && (
+                    <div className="bg-purple-50 border border-purple-200 rounded-lg p-3 mt-4">
+                      <div className="flex items-center space-x-2 mb-2">
+                        <Crown className="w-4 h-4 text-purple-600" />
+                        <span className="font-medium text-purple-900">Premium Template</span>
+                      </div>
+                      <p className="text-purple-700 text-xs">
+                        This template includes advanced features and premium design elements.
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
