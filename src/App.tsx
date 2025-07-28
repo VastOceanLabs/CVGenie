@@ -24,7 +24,13 @@ import { Helmet, HelmetProvider } from 'react-helmet-async';
 // Core components (eager loaded)
 import Builder from './components/Builder';
 
-// Actual components - replace these imports as you create the actual files
+import NavigationComponent from './components/Navigation';
+import FooterComponent from './components/footer_component';
+import ErrorBoundaryComponent from './components/error_boundary_component';
+import LoadingSpinnerComponent from './components/loading_states';
+import ToastNotificationsComponent from './components/toast_notifications';
+//
+Actual components - replace these imports as you create the actual files
 // import Navigation from './components/Navigation'; // Create when ready
 // import Footer from './components/footer_component'; // Available
 // import ErrorBoundary from './components/error_boundary_component'; // Available  
@@ -36,11 +42,17 @@ import Builder from './components/Builder';
 // Stub components - replace these imports as you create the actual files
 // Stub components with attempts to load real components from correct paths
 // These will fall back to stubs if the real components don't exist yet
-let Navigation: React.FC;
-let Footer: React.FC;
-let ErrorBoundary: React.ComponentType<{ children: React.ReactNode; fallback?: React.ReactNode }>;
-let LoadingSpinner: React.FC<{ text?: string }>;
-let ToastNotifications: React.FC;
+let Navigation: React.FC = NavigationComponent;
+
+
+
+
+let Footer: React.FC = FooterComponent;
+let ErrorBoundary: React.ComponentType<{ children: React.ReactNode; fallback?: React.ReactNode }> = ErrorBoundaryComponent;
+let LoadingSpinner: React.FC<{ text?: string }> = LoadingSpinnerComponent;
+let ToastNotifications: React.FC = ToastNotificationsComponent;
+
+
 
 try {
   // Try to import real components - replace with actual imports as files are created
